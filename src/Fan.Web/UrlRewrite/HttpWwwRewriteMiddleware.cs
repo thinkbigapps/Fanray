@@ -16,7 +16,7 @@ namespace Fan.Web.UrlRewrite
         private ILogger<HttpWwwRewriteMiddleware> _logger;
 
         public HttpWwwRewriteMiddleware(RequestDelegate next,
-            IOptions<AppSettings> options, ILoggerFactory loggerFactory)
+            IOptionsSnapshot<AppSettings> options, ILoggerFactory loggerFactory)
         {
             if (options == null)
             {
