@@ -1,4 +1,5 @@
 ﻿using Fan.Web.MetaWeblog;
+using Fan.Web.UrlRewrite;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -12,6 +13,11 @@ namespace Microsoft.AspNetCore.Builder
         public static IApplicationBuilder UseMetablog(this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<MetaWeblogMiddleware>();
+        }
+
+        public static IApplicationBuilder UseHttpWwwRewrite(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<HttpWwwRewriteMiddleware>();
         }
     }
 }

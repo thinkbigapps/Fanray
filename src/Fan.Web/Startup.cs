@@ -12,6 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
+using Fan.Enums;
+using System;
+using Fan.Web.UrlRewrite;
 
 namespace Fan.Web
 {
@@ -31,8 +34,8 @@ namespace Fan.Web
             // Db
             services.AddDbContext<FanDbContext>(builder =>
             {
-                bool.TryParse(Configuration["Database:UseSqLite"], out bool useSqLite);
-                if (useSqLite)
+                Enum.TryParse(Configuration["AppSettings:Database"], out ESupportedDatabase db);
+                if (db == ESupportedDatabase.Sqlite)
                 {
                     builder.UseSqlite("Data Source=" + Path.Combine(HostingEnvironment.ContentRootPath, "Fanray.sqlite"));
                 }
@@ -70,6 +73,9 @@ namespace Fan.Web
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<IXmlRpcHelper, XmlRpcHelper>();
             services.AddScoped<IMetaWeblogService, MetaWeblogService>();
+            services.AddScoped<IHttpWwwRewriter, HttpWwwRewriter>();
+
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             // Mvc
             services.AddMvc();
@@ -77,6 +83,9 @@ namespace Fan.Web
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            // https and www rewrite
+            app.UseHttpWwwRewrite();
+
             // OLW
             app.MapWhen(context => context.Request.Path.ToString().Equals("/olw"), appBuilder => appBuilder.UseMetablog());
 
