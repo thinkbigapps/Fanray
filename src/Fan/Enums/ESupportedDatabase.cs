@@ -3,6 +3,6 @@
     public enum ESupportedDatabase
     {
         Sqlite,
-        SqlSever,
+        SqlServer,
     }
 }
