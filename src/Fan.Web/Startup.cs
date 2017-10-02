@@ -15,15 +15,19 @@ using System.IO;
 using Fan.Enums;
 using System;
 using Fan.Web.UrlRewrite;
+using Microsoft.Extensions.Logging;
 
 namespace Fan.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        private ILogger<Startup> _logger;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             HostingEnvironment = env;
             Configuration = configuration;
+            _logger = loggerFactory.CreateLogger<Startup>();
         }
 
         public IConfiguration Configuration { get; }
@@ -34,14 +38,16 @@ namespace Fan.Web
             // Db
             services.AddDbContext<FanDbContext>(builder =>
             {
-                Enum.TryParse(Configuration["AppSettings:Database"], out ESupportedDatabase db);
+                Enum.TryParse(Configuration["AppSettings:Database"], ignoreCase: true, result: out ESupportedDatabase db);
                 if (db == ESupportedDatabase.Sqlite)
                 {
                     builder.UseSqlite("Data Source=" + Path.Combine(HostingEnvironment.ContentRootPath, "Fanray.sqlite"));
+                    _logger.LogInformation("SQLite database will be used.");
                 }
                 else
                 {
                     builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                    _logger.LogInformation("SQL Server database will be used.");
                 }
             });
 

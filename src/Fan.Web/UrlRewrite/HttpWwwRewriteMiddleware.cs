@@ -26,12 +26,18 @@ namespace Fan.Web.UrlRewrite
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _settings = options.Value;
             _logger = loggerFactory.CreateLogger<HttpWwwRewriteMiddleware>();
+
+            _logger.LogDebug("Database: {@Database}", _settings.Database);
+            _logger.LogDebug("PreferredDomain: {@PreferredDomain}", _settings.PreferredDomain);
+            _logger.LogDebug("UseHttps: {@UseHttps}", _settings.UseHttps);
         }
 
         public Task Invoke(HttpContext context, IHttpWwwRewriter helper)
         {
             if (helper.ShouldRewrite(_settings, context.Request.GetDisplayUrl(), out string url))
             {
+                _logger.LogInformation("RewriteUrl: {@RewriteUrl}", url);
+
                 context.Response.Headers[HeaderNames.Location] = url;
                 context.Response.StatusCode = 301;
                 context.Response.Redirect(url);
