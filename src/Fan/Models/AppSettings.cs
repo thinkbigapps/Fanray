@@ -20,6 +20,8 @@ namespace Fan.Models
         /// - "www" will forward root domain to www subdomain, e.g. fanray.com -> www.fanray.com
         /// - "nonwww" will forward www subdomain to root domain, e.g. www.fanray.com -> fanray.com
         /// 
+        /// Note if you are running from a sub domian other than "www", preferred domain will be ignored.
+        /// 
         /// This setting is for SEO, it's good to decide on a preferred domain as indicated in this
         /// Google Search Console document https://support.google.com/webmasters/answer/44231?hl=en
         /// </remarks>

@@ -16,6 +16,7 @@ using Fan.Enums;
 using System;
 using Fan.Web.UrlRewrite;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace Fan.Web
 {
@@ -90,7 +91,9 @@ namespace Fan.Web
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             // https and www rewrite
-            app.UseHttpWwwRewrite();
+            //app.UseHttpWwwRewrite();
+            app.UseRewriter(new RewriteOptions()
+                .AddIISUrlRewrite(env.ContentRootFileProvider, "urlRewrite.config"));
 
             // OLW
             app.MapWhen(context => context.Request.Path.ToString().Equals("/olw"), appBuilder => appBuilder.UseMetablog());
