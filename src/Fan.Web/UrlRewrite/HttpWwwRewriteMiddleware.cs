@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Fan.Web.UrlRewrite
 {
@@ -15,26 +16,20 @@ namespace Fan.Web.UrlRewrite
         private readonly AppSettings _settings;
         private ILogger<HttpWwwRewriteMiddleware> _logger;
 
-        public HttpWwwRewriteMiddleware(RequestDelegate next,
-            IOptionsSnapshot<AppSettings> options, ILoggerFactory loggerFactory)
+        public HttpWwwRewriteMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
         {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
             _next = next ?? throw new ArgumentNullException(nameof(next));
-            _settings = options.Value;
             _logger = loggerFactory.CreateLogger<HttpWwwRewriteMiddleware>();
-
-            _logger.LogDebug("Database: {@Database}", _settings.Database);
-            _logger.LogDebug("PreferredDomain: {@PreferredDomain}", _settings.PreferredDomain);
-            _logger.LogDebug("UseHttps: {@UseHttps}", _settings.UseHttps);
         }
 
         public Task Invoke(HttpContext context, IHttpWwwRewriter helper)
         {
-            if (helper.ShouldRewrite(_settings, context.Request.GetDisplayUrl(), out string url))
+            var settings = context.RequestServices.GetService<IOptionsSnapshot<AppSettings>>().Value;
+
+            _logger.LogDebug("AppSettings:PreferredDomain {@PreferredDomain}", settings.PreferredDomain);
+            _logger.LogDebug("AppSettings:UseHttps {@UseHttps}", settings.UseHttps);
+
+            if (helper.ShouldRewrite(settings, context.Request.GetDisplayUrl(), out string url))
             {
                 _logger.LogInformation("RewriteUrl: {@RewriteUrl}", url);
 

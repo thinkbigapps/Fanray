@@ -43,12 +43,12 @@ namespace Fan.Web
                 if (db == ESupportedDatabase.Sqlite)
                 {
                     builder.UseSqlite("Data Source=" + Path.Combine(HostingEnvironment.ContentRootPath, "Fanray.sqlite"));
-                    _logger.LogInformation("SQLite database will be used.");
+                    _logger.LogInformation("SQLite database is being used.");
                 }
                 else
                 {
                     builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-                    _logger.LogInformation("SQL Server database will be used.");
+                    _logger.LogInformation("SQL Server database is being used.");
                 }
             });
 
@@ -91,9 +91,9 @@ namespace Fan.Web
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             // https and www rewrite
-            //app.UseHttpWwwRewrite();
-            app.UseRewriter(new RewriteOptions()
-                .AddIISUrlRewrite(env.ContentRootFileProvider, "urlRewrite.config"));
+            app.UseHttpWwwRewrite();
+            //app.UseRewriter(new RewriteOptions()
+            //    .AddIISUrlRewrite(env.ContentRootFileProvider, "urlRewrite.config"));
 
             // OLW
             app.MapWhen(context => context.Request.Path.ToString().Equals("/olw"), appBuilder => appBuilder.UseMetablog());
