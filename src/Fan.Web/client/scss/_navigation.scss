@@ -1,4 +1,4 @@
-﻿.navbar-custom {
+.navbar-custom {
     position: absolute;
     top: 0;
     left: 0;
@@ -15,11 +15,14 @@
         font-size: 12px;
     }
 
-    .nav li a {
+    .nav li a, .nav li button {
         text-transform: uppercase;
         font-size: 12px;
         font-weight: 800;
         letter-spacing: 1px;
+    }
+    .navbar-btn {
+        margin:14px 0 0 14px;
     }
 
     @media only screen and (min-width: 768px) {

@@ -133,7 +133,7 @@ namespace Fan.Web
             app.MapWhen(context => context.Request.Path.ToString().Equals("/olw"), appBuilder => appBuilder.UseMetablog());
             app.UseStatusCodePagesWithReExecute("/Home/ErrorCode/{0}"); // needs to be after hsts and rewrite
             app.UseStaticFiles();
-            app.UseAuthentication();
+            app.UseAuthentication(); // UseIdentity is obsolete, UseAuth is recommended
             app.UseMvc(routes => RegisterRoutes(routes, app));
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
