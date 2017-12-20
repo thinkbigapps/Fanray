@@ -1,18 +1,15 @@
 ﻿using Fan.Blogs.Controllers;
-using Fan.Blogs.Enums;
-using Fan.Blogs.Helpers;
-using Fan.Blogs.Models;
 using Fan.Blogs.Services;
 using Fan.Exceptions;
 using Fan.Models;
 using Fan.Settings;
 using Fan.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Fan.Web.Controllers
@@ -179,6 +176,16 @@ namespace Fan.Web.Controllers
             }
 
             // 500 or exception other than FanException occurred unhandled
+            return View();
+        }
+
+        /// <summary>
+        /// Admin console, the ng2 app.
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        public IActionResult Admin()
+        {
             return View();
         }
     }
