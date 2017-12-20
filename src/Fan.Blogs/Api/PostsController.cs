@@ -1,8 +1,6 @@
-﻿using Fan.Blogs.Enums;
-using Fan.Blogs.Models;
+﻿using Fan.Blogs.Api.Models;
+using Fan.Blogs.Enums;
 using Fan.Blogs.Services;
-using Fan.Blogs.ViewModels;
-using Fan.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -16,14 +14,9 @@ namespace Fan.Blogs.Api
     public class PostsController : Controller
     {
         private readonly IBlogService _blogSvc;
-        private readonly ISettingService _settingSvc;
-        public PostsController(
-            IBlogService blogService,
-            ISettingService settingService
-            )
+        public PostsController(IBlogService blogService)
         {
             _blogSvc = blogService;
-            _settingSvc = settingService;
         }
 
         /// <summary>
@@ -34,12 +27,10 @@ namespace Fan.Blogs.Api
         /// <param name="size">Page size. Default 20.</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<BlogPostListViewModel> Get(EPostStatus status = EPostStatus.Published, int page = 1, int size = 20)
+        public async Task<BlogPostListVM> Get(EPostStatus status = EPostStatus.Published, int page = 1, int size = 20)
         {
-            var posts = await _blogSvc.GetPostsAsync(page);
-            var blogSettings = await _settingSvc.GetSettingsAsync<BlogSettings>();
-            var vm = new BlogPostListViewModel(posts, blogSettings, Request);
-            return vm;
+            var blogPostList = await _blogSvc.GetPostsAsync(page);
+            return new BlogPostListVM(blogPostList);
         }
 
         /// <summary>
@@ -48,12 +39,10 @@ namespace Fan.Blogs.Api
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id:int}")]
-        public async Task<BlogPostViewModel> Get(int id)
+        public async Task<BlogPostVM> Get(int id)
         {
             var blogPost = await _blogSvc.GetPostAsync(id);
-            var blogSettings = await _settingSvc.GetSettingsAsync<BlogSettings>();
-            var vm = new BlogPostViewModel(blogPost, blogSettings, Request);
-            return vm;
+            return new BlogPostVM(blogPost);
         }
     }
 }
