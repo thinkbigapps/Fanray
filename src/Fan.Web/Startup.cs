@@ -5,6 +5,7 @@ using Fan.Blogs.MetaWeblog;
 using Fan.Blogs.Services;
 using Fan.Data;
 using Fan.Emails;
+using Fan.Exceptions;
 using Fan.Medias;
 using Fan.Models;
 using Fan.Settings;
@@ -107,6 +108,7 @@ namespace Fan.Web
             shortcodeService.Add<YouTubeShortcode>(tag: "youtube");
             services.AddSingleton<IShortcodeService>(shortcodeService);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<ApiExceptionFilter>();
 
             // Mvc
             services.AddMvc();

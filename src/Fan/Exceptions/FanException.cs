@@ -1,6 +1,7 @@
 ﻿using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
+using System.Net;
 
 namespace Fan.Exceptions
 {
@@ -14,39 +15,38 @@ namespace Fan.Exceptions
     public class FanException : Exception
     {
         /// <summary>
-        /// Thrown with a message.
+        /// The status code to return for API operation.
         /// </summary>
-        /// <param name="message"></param>
-        public FanException(string message)
-            : base(message)
-        {
-        }
-
-        /// <summary>
-        /// Thrown with a message and an exception.
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="inner"></param>
-        public FanException(string message, Exception inner)
-            : base(message, inner)
-        {
-        }
-
-        /// <summary>
-        /// Thrown when <see cref="ValidationResult.IsValid"/> is false. 
-        /// </summary>
-        /// <param name="message">Summary of what's happening</param>
-        /// <param name="result">Individual errors inside the result</param>
-        public FanException(string message, IList<ValidationFailure> validationFailures)
-            : base(message)
-        {
-            ValidationFailures = validationFailures;
-        }
+        public HttpStatusCode StatusCode { get; set; }
 
         /// <summary>
         /// A list of <see cref="ValidationFailure"/>. Null if the exception thrown is not
         /// as a result of <see cref="ValidationResult.IsValid"/> being false.
         /// </summary>
         public IList<ValidationFailure> ValidationFailures { get; }
+
+        /// <summary>
+        /// Thrown with a message, and optional status code and validation failures.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="statusCode">Default to 400.</param>
+        /// <param name="validationFailures"></param>
+        public FanException(string message, HttpStatusCode statusCode = HttpStatusCode.BadRequest, IList<ValidationFailure> validationFailures = null)
+            : base(message)
+        {
+            StatusCode = statusCode;
+            ValidationFailures = validationFailures;
+        }
+
+        /// <summary>
+        /// Thrown with an exception and optional status code.
+        /// </summary>
+        /// <param name="exception"></param>
+        /// <param name="statusCode">Default to 400.</param>
+        public FanException(Exception exception, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
+            : base(exception.Message)
+        {
+            StatusCode = statusCode;
+        }
     }
 }
