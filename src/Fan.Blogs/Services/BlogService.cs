@@ -135,7 +135,7 @@ namespace Fan.Blogs.Services
             var cat = cats.SingleOrDefault(c => c.Id == id);
             if (cat == null)
             {
-                throw new FanException($"Category with id {id} is not found.");
+                throw new FanException($"Category with id {id} is not found.", HttpStatusCode.NotFound);
             }
 
             return cat;
@@ -154,7 +154,7 @@ namespace Fan.Blogs.Services
             var cat = cats.SingleOrDefault(c => c.Slug.Equals(slug, StringComparison.CurrentCultureIgnoreCase));
             if (cat == null)
             {
-                throw new FanException($"Category '{slug}' does not exist.");
+                throw new FanException($"Category '{slug}' does not exist.", HttpStatusCode.NotFound);
             }
 
             return cat;
@@ -230,7 +230,7 @@ namespace Fan.Blogs.Services
             var tag = tags.SingleOrDefault(c => c.Id == id);
             if (tag == null)
             {
-                throw new FanException($"Tag with id {id} is not found.");
+                throw new FanException($"Tag with id {id} is not found.", HttpStatusCode.NotFound);
             }
 
             return tag;
@@ -249,7 +249,7 @@ namespace Fan.Blogs.Services
             var tag = tags.SingleOrDefault(c => c.Slug.Equals(slug, StringComparison.CurrentCultureIgnoreCase));
             if (tag == null)
             {
-                throw new FanException($"Tag '{slug}' does not exist.");
+                throw new FanException($"Tag '{slug}' does not exist.", HttpStatusCode.NotFound);
             }
 
             return tag;
@@ -410,7 +410,7 @@ namespace Fan.Blogs.Services
         public async Task<BlogPost> GetPostAsync(int id)
         {
             var post = await QueryPostAsync(id, EPostType.BlogPost);
-            if (post == null) throw new FanException("Blog post not found.");
+            if (post == null) throw new FanException("Blog post not found.", HttpStatusCode.NotFound);
             return await GetBlogPostAsync(post);
         }
 
@@ -430,7 +430,7 @@ namespace Fan.Blogs.Services
         {
             // todo caching
             var post = await _postRepo.GetAsync(slug, year, month, day);
-            if (post == null) throw new FanException("Blog post not found.");
+            if (post == null) throw new FanException("Blog post not found.", HttpStatusCode.NotFound);
             return await GetBlogPostAsync(post);
         }
 
@@ -595,7 +595,7 @@ namespace Fan.Blogs.Services
 
             if (post == null)
             {
-                throw new FanException($"{type} with id {id} is not found.");
+                throw new FanException($"{type} with id {id} is not found.", HttpStatusCode.NotFound);
             }
 
             return post;
@@ -650,7 +650,7 @@ namespace Fan.Blogs.Services
             ValidationResult result = await validator.ValidateAsync(tax);
             if (!result.IsValid)
             {
-                throw new FanException($"Failed to {createOrUpdate.ToString().ToLower()} {type}.", result.Errors);
+                throw new FanException($"Failed to {createOrUpdate.ToString().ToLower()} {type}.", HttpStatusCode.BadRequest, result.Errors);
             }
 
             // Slug: user can create / update slug, we format the slug if it's available else we 
@@ -677,7 +677,7 @@ namespace Fan.Blogs.Services
             ValidationResult result = await validator.ValidateAsync(blogPost);
             if (!result.IsValid)
             {
-                throw new FanException($"Failed to {createOrUpdate.ToString().ToLower()} blog post.", result.Errors);
+                throw new FanException($"Failed to {createOrUpdate.ToString().ToLower()} blog post.", HttpStatusCode.BadRequest, result.Errors);
             }
 
             // Get post

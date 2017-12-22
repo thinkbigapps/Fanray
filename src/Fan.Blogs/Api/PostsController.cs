@@ -1,14 +1,18 @@
 ﻿using Fan.Blogs.Api.Models;
 using Fan.Blogs.Enums;
+using Fan.Blogs.Models;
 using Fan.Blogs.Services;
+using Fan.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Fan.Blogs.Api
 {
     [Authorize]
+    [ServiceFilter(typeof(ApiExceptionFilter))]
     [EnableCors("CorsPolicy")]
     [Route("api/blog/[controller]")]
     public class PostsController : Controller
@@ -43,6 +47,72 @@ namespace Fan.Blogs.Api
         {
             var blogPost = await _blogSvc.GetPostAsync(id);
             return new BlogPostVM(blogPost);
+        }
+
+        /// <summary>
+        /// POST api/blog/posts, returns 201 on success, 400 on error.
+        /// </summary>
+        /// <param name="post"></param>
+        [HttpPost]
+        [Produces(typeof(BlogPostIM))]
+        public async Task<IActionResult> Post([FromBody]BlogPostIM post)
+        {
+            var blogPost = new BlogPost
+            {
+                UserId = post.UserId,
+                Title = post.Title,
+                Slug = post.Slug,
+                Body = post.Body,
+                Excerpt = post.Excerpt,
+                CreatedOn = post.CreatedOn,
+                CategoryTitle = post.CategoryTitle,
+                TagTitles = new List<string>(post.TagTitles.Split(',')),
+                Status = post.Status,
+                CommentStatus = ECommentStatus.AllowComments, // hardcode todo
+            };
+
+            blogPost = await _blogSvc.CreatePostAsync(blogPost);
+            return CreatedAtAction("Get", new { id = blogPost.Id }, new BlogPostVM(blogPost));
+        }
+
+        /// <summary>
+        /// PUT api/blog/posts/5, returns 200 with updated <see cref="BlogPostVM"/>, or 400 on failure.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="post"></param>
+        /// <remarks>
+        /// https://twitter.com/FanrayMedia/status/944243856425467904
+        /// </remarks>
+        [HttpPut("{id:int}")]
+        public async Task<BlogPostVM> Put(int id, [FromBody]BlogPostIM post)
+        {
+            var blogPost = new BlogPost
+            {
+                Id = id,
+                UserId = post.UserId,
+                Title = post.Title,
+                Slug = post.Slug,
+                Body = post.Body,
+                Excerpt = post.Excerpt,
+                CreatedOn = post.CreatedOn,
+                CategoryTitle = post.CategoryTitle,
+                TagTitles = new List<string>(post.TagTitles.Split(',')),
+                Status = post.Status,
+                CommentStatus = ECommentStatus.AllowComments, // todo
+            };
+
+            blogPost = await _blogSvc.UpdatePostAsync(blogPost);
+            return new BlogPostVM(blogPost);
+        }
+
+        /// <summary>
+        /// DELETE api/blog/posts/5
+        /// </summary>
+        /// <param name="id"></param>
+        [HttpDelete("{id:int}")]
+        public async Task Delete(int id)
+        {
+            await _blogSvc.DeletePostAsync(id);
         }
     }
 }
