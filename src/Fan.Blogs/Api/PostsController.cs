@@ -54,7 +54,7 @@ namespace Fan.Blogs.Api
         /// </summary>
         /// <param name="post"></param>
         [HttpPost]
-        [Produces(typeof(BlogPostIM))]
+        [Produces(typeof(BlogPostVM))]
         public async Task<IActionResult> Post([FromBody]BlogPostIM post)
         {
             var blogPost = new BlogPost

@@ -21,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Fan.Web
 {
@@ -115,6 +116,12 @@ namespace Fan.Web
 
             // AppInsights
             services.AddApplicationInsightsTelemetry(Configuration);
+
+            // Swagger
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Fanray API", Version = "v1" });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -137,6 +144,11 @@ namespace Fan.Web
             app.UseStaticFiles();
             app.UseAuthentication(); // UseIdentity is obsolete, UseAuth is recommended
             app.UseMvc(routes => RegisterRoutes(routes, app));
+            app.UseSwagger(); // view the generated Swagger JSON at "/swagger/v1/swagger.json"
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fanray API V1");
+            }); // interactive docs at "/swagger"
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
