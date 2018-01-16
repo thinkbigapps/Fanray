@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Fan.Web.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller
     {
         private readonly UserManager<User> _userManager;
