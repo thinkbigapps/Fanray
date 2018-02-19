@@ -13,8 +13,9 @@
       "launchBrowser": true,
       "launchUrl": "https://localhost:44381/",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      },
+      "use64Bit": false
     },
     "Fan.Web": {
       "commandName": "Project",
