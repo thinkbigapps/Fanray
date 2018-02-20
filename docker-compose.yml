@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  fan.web:
+    image: fan.web
+    build:
+      context: .
+      dockerfile: src\Fan.Web\Dockerfile
