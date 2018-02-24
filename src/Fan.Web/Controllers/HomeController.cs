@@ -67,7 +67,7 @@ namespace Fan.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _logger.LogInformation("Fanray Setup Begins");
+                _logger.LogInformation("Tamils1809 Setup Begins");
 
                 // user with email as username
                 var user = new User { UserName = model.Email, Email = model.Email, DisplayName = model.DisplayName };

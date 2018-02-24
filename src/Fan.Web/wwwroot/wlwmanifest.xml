@@ -16,7 +16,7 @@
   </options>
   <!-- https://msdn.microsoft.com/en-us/library/bb463264.aspx -->
   <weblog>
-    <serviceName>Fanray</serviceName>
+    <serviceName>Tamils1809</serviceName>
     <adminUrl><![CDATA[{blog-homepage-url}admin]]></adminUrl>
   </weblog>
 </manifest>
