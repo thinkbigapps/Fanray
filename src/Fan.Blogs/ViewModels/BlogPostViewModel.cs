@@ -139,5 +139,9 @@ namespace Fan.Blogs.ViewModels
         public string FacebookShareLink { get; }
         public string GoogleShareLink { get; }
         public string LinkedInShareLink { get; }
+
+        //---------------------------------------------------------------------- Ads
+
+        public string GoogleAds { get;}
     }
 }
