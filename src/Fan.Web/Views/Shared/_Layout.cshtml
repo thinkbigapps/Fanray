@@ -84,9 +84,48 @@
             <div class="blog-content">
                 @RenderBody()
                 <footer class="site-footer">
-                    <p class="text-muted pull-left">&copy; @DateTime.Now.Year - @coreSettings.Title</p>
-                    <p class="text-muted pull-right">Powered by <a href="https://tamils1809.com"><strong>TAMILS1809</strong></a></p> 
-                   
+                    <p class="text-muted pull-left" style="text-align:left">
+                        &copy; @DateTime.Now.Year - @coreSettings.Title
+                        <br />
+                        Design and Developed by TAMILS1809
+                        <br />
+                        Version 1.0.0 CV:feb201827
+
+
+                    </p>
+
+
+
+                    @*<p class="text-muted pull-right">Powered by <a href="https://tamils1809.com"><strong>TAMILS1809</strong></a></p>*@
+                    <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Qr Code</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <img src="~/tamilan.png" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <span id="social-list" style="float:right;text-align:left">
+                        Follow Me<br>
+                                 <a data-toggle="modal" data-target="#myModal" title="QR Code">
+                                     <i class="fa fa-fw fa-qrcode" style="font-size:23px;margin-left: -5px;cursor:pointer;color:black">
+                                     </i>
+                                 </a>
+                        <a href="https://twitter.com/tamils1809" title="Twitter" target="_blank"><i class="fa fa-twitter-square" style="font-size:25px;color:#00acee;"></i></a>
+                        <a href="https://www.facebook.com/tamils1809" title="Facebook" target="_blank"><i class="fa fa-facebook-square" style="font-size:25px;color:#3b5998"></i></a>
+                        <a href="https://plus.google.com/u/0/+TamilS1809" title="Google+" target="_blank"><i class="fa fa-google-plus-square" style="font-size:25px;color:#e93f2e"></i></a>
+                        <a href="https://www.linkedin.com/in/tamils1809/" title="Linkedin" target="_blank"> <i class="fa fa-linkedin-square" style="font-size:25px;color:#0e76a8"></i></a>
+                    </span>
+
                 </footer>
             </div>
             <aside class="blog-sidebar">
